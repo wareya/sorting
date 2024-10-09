@@ -8,9 +8,6 @@ Grailsort is disabled in code because the implementation is wrong (memory unsafe
 
 As text:
 
-| td = top-down merge sort | bu = bottom-up merge sort
-----
-
 Sort of several million items.
 Times are in seconds.
 Average of 5 runs each. Measurement noise is around +/-1%.
@@ -19,9 +16,10 @@ Textbook, coherent, topdown, and inplace are merge sorts.
 All custom sorts have an insertion sort cutoff at 16 elements.
 Toolchain: gcc (g++) 14.2.0
 
-textbook bu = only one merge block size at a time
-
-coherent bu = merge parent blocks on the fly (cache coherent)
+- textbook bu = only one merge block size at a time
+- coherent bu = merge parent blocks on the fly (cache coherent)
+- td = top-down merge sort
+- bu = bottom-up merge sort
 
 observations:
 - quicksort/std::sort is slower than merge-based sorts on patterned data
