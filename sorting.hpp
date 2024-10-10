@@ -641,7 +641,6 @@ void merge_sort_bottomup_inplace_impl(Comparator f, T * data, size_t start, size
 // ####
 // quick sort
 // ####
-#include <assert.h>
 template<typename T, typename Comparator>
 void quick_sort_impl(Comparator f, T * data, size_t start, size_t one_past_end)
 {
@@ -671,41 +670,22 @@ void quick_sort_impl(Comparator f, T * data, size_t start, size_t one_past_end)
         pivot = pivot_lo + (pivot_hi - pivot_lo) / 2;
         inv = !inv;
     }
-    if (pivot == one_past_end - 1)
-        pivot -= 1;
     
     // now perform partitioning
-    
-    // move pivot value to stack for better cache locality in loop
-    std::swap(data[pivot], data[one_past_end - 1]);
-    T pivot_val(std::move(data[one_past_end - 1]));
-    
     // partition array into two parts separated by the pivot value
     size_t i = start;
     size_t j = one_past_end - 2;
     while (i < j)
     {
-        while (i < one_past_end && f(data[i], pivot_val)) i += 1;
-        while (j > start && f(pivot_val, data[j])) j -= 1;
+        while (f(data[i], data[pivot])) i += 1;
+        while (f(data[pivot], data[j])) j -= 1;
         
         if (i < j)
             std::swap(data[i++], data[j--]);
     }
-    // i is now the partition center index
-    
-    data[one_past_end - 1] = std::move(pivot_val);
-    
-    // if i == j, then the partition center value might be an arbitrary value higher or lower than the pivot.
-    // lower is wrong. if lower, then to fix it, move partition center right by 1
-    // all values to the right of i are greater than or equal to the pivot value, so this works
-    if (i == j && i < one_past_end && f(data[i], data[one_past_end - 1]))
-        i += 1;
-    
-    std::swap(data[i], data[one_past_end - 1]);
     
     quick_sort_impl(f, data, start, i);
     if (i + 1 < one_past_end)
         quick_sort_impl(f, data, i + 1, one_past_end);
 }
-
 #endif // _INCLUDE_BXX_SORTING

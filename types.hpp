@@ -280,10 +280,14 @@ public:
         {
             for (size_t i = 0; i < mlength; i++)
                 ((T*)mbuffer)[i].~T();
-            free(mbuffer_raw);
+            if (other.mcapacity < mcapacity)
+            {
+                mcapacity = 0;
+                free(mbuffer_raw);
+                mbuffer = 0;
+                mbuffer_raw = 0;
+            }
             mlength = 0;
-            mbuffer = 0;
-            mbuffer_raw = 0;
         }
         
         reserve(other.size());
@@ -309,6 +313,20 @@ public:
     }
     
     // API
+    
+    void clear()
+    {
+        if (mbuffer_raw)
+        {
+            for (size_t i = 0; i < mlength; i++)
+                ((T*)mbuffer)[i].~T();
+            mlength = 0;
+            mcapacity = 0;
+            free(mbuffer_raw);
+            mbuffer = 0;
+            mbuffer_raw = 0;
+        }
+    }
     
     /// If T's move constructor throws during operation, the container is invalid (but destructible).
     constexpr void reserve(size_t new_cap)

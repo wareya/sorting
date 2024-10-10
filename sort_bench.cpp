@@ -298,8 +298,12 @@ int main(void)
         //printf("copies: %zu\n", copycount);
         printf("%f\n", end - start);
     }
+    vec.clear();
+    vec2.clear();
     
     printf("data, textbook bu, coherent bu, td, std::stable_sort, std::sort, inplace td, inplace bu, quicksort, timsort\n");
+    
+    // braces are to force destructors to run early to reduce peak memory usage
     
     state  = 6153643146;
     state2 = 6153643149;
@@ -310,7 +314,7 @@ int main(void)
         forwards.push_back((n  += (rng(&state) >> 28)) + i);
     printf("presorted");
     comparify(forwards);
-    
+
     state2 = 6153643149;
     Vec<std::string> strings;
     for (size_t i = 0; i < 2173111; i++)
@@ -324,6 +328,8 @@ int main(void)
         strings.push_back(std::to_string(rng(&state2) / 1000000));
     printf("strings (many duplicates)");
     comparify(strings);
+    strings.clear();
+    
     
     state2 = 6153643149;
     Vec<uint32_t> white;
@@ -331,6 +337,8 @@ int main(void)
         white.push_back(rng(&state2));
     printf("white noise");
     comparify(white);
+    white.clear();
+    
     
     state2 = 6153643149;
     Vec<uint16_t> white2;
@@ -338,6 +346,8 @@ int main(void)
         white2.push_back(rng(&state2));
     printf("white noise (u16)");
     comparify(white2);
+    white2.clear();
+    
     
     state2 = 6153643149;
     Vec<uint8_t> white3;
@@ -345,6 +355,8 @@ int main(void)
         white3.push_back(rng(&state2));
     printf("white noise (u8)");
     comparify(white3);
+    white3.clear();
+    
     
     state2 = 6153643149;
     Vec<uint64_t> white4;
@@ -352,10 +364,14 @@ int main(void)
         white4.push_back((rng(&state2), state2));
     printf("white noise (u64)");
     comparify(white4);
+    white4.clear();
+    
     
     forwards.insert_at(0, 0xFFFFFFFF);
     printf("almost presorted");
     comparify(forwards);
+    forwards.clear();
+    
     
     state2 = 6153643149;
     Vec<uint32_t> bruh;
@@ -363,6 +379,8 @@ int main(void)
         bruh.push_back(((rng(&state2) >> 24) & 1) * 1000);
     printf("two values");
     comparify(bruh);
+    bruh.clear();
+    
     
     Vec<uint32_t> rev;
     for (size_t i = 0; i < 15117311; i++)
@@ -412,9 +430,11 @@ int main(void)
         rev.push_back(i / 100 - (i % 214) + 214);
     printf("sawtooth D");
     comparify(rev);
+    rev.clear();
+    
+    
     
     state2 = 6153643149;
-    
     white = {};
     for (size_t i = 0; i < 5117311; i++)
         white.push_back((rng(&state2) % 100) + i / 50000 + rng(&state2) % 50);
@@ -426,6 +446,8 @@ int main(void)
         white.push_back(rng(&state2) / 10000);
     printf("many duplicates B");
     comparify(white);
+    white.clear();
+    
     
     state  = 6153643146;
     state2 = 6153643149;
