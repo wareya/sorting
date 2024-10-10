@@ -9,7 +9,7 @@
 
 #include <chrono>
 
-//#include "grailsort/grailsort.h"
+#include "other/timsort.hpp"
 
 double seconds()
 {
@@ -164,18 +164,18 @@ void comparify(Vec<T> & vec)
         double end = seconds();
         time += (end - start) / 5.0;
     }
-    //printf(", %f", time);
-    //
-    //Vec<T> vecX = vec;
-    //time = 0.0;
-    //for (size_t i = 0; i < 5; i++)
-    //{
-    //    vecX = vec;
-    //    double start = seconds();
-    //    grailsort(vecX.begin(), vecX.end(), [](auto & a, auto & b) { return a < b; });
-    //    double end = seconds();
-    //    time += (end - start) / 5.0;
-    //}
+    printf(", %f", time);
+    
+    Vec<T> vecX = vec;
+    time = 0.0;
+    for (size_t i = 0; i < 5; i++)
+    {
+        vecX = vec;
+        double start = seconds();
+        gfx::timsort(vecX.begin(), vecX.end(), [](auto & a, auto & b) { return a < b; });
+        double end = seconds();
+        time += (end - start) / 5.0;
+    }
     printf(", %f\n", time);
     
     for (size_t i = 0; i < vec.size(); i++)
@@ -299,8 +299,7 @@ int main(void)
         printf("%f\n", end - start);
     }
     
-    //printf("data, textbook bu, coherent bu, td, std::stable_sort, std::sort, inplace td, inplace bu, quicksort, grailsort\n");
-    printf("data, textbook bu, coherent bu, td, std::stable_sort, std::sort, inplace td, inplace bu, quicksort\n");
+    printf("data, textbook bu, coherent bu, td, std::stable_sort, std::sort, inplace td, inplace bu, quicksort, timsort\n");
     
     state  = 6153643146;
     state2 = 6153643149;

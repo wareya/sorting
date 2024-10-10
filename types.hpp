@@ -276,7 +276,17 @@ public:
         if (this == &other)
             return *this;
         
-        apply_cap_hint(other.capacity());
+        if (mbuffer_raw)
+        {
+            for (size_t i = 0; i < mlength; i++)
+                ((T*)mbuffer)[i].~T();
+            free(mbuffer_raw);
+            mlength = 0;
+            mbuffer = 0;
+            mbuffer_raw = 0;
+        }
+        
+        reserve(other.size());
         copy_into(*this, other);
         
         return *this;
@@ -518,21 +528,11 @@ private:
     void apply_cap_hint(size_t count)
     {
         mcapacity = count > 0 ? 1 : 0;
-        
         while (mcapacity < count)
             mcapacity = (mcapacity << 1) >= count ? (mcapacity << 1) : count;
-        
-        if (mcapacity != 0)
-        {
-            mbuffer_raw = (char *)malloc(mcapacity * sizeof(T) + alignof(T));
-            if (!mbuffer_raw) throw;
-            mbuffer = mbuffer_raw;
-            while (size_t(mbuffer) % alignof(T))
-                mbuffer += 1;
-        }
+        do_realloc(mcapacity);
     }
     
-    //template<typename = typename std::enable_if<std::is_copy_constructible<T>::value>::type>
     static void copy_into(Vec & a, const Vec & b)
     {
         a.mlength = b.size();
