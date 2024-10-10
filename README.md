@@ -4,8 +4,6 @@ But efficient algorithms only!
 
 ![image](https://github.com/user-attachments/assets/e2831367-0c02-47e3-8cc0-10e9628784f9)
 
-Grailsort is disabled in code because the implementation is wrong (memory unsafe) and crashes when run with some specific compiler versions.
-
 As text:
 
 Sort of several million items.
